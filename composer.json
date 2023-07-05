@@ -1,0 +1,18 @@
+{
+    "name": "app/test",
+    "autoload": {
+        "psr-4": {
+            "Server\\": "server/",
+            "Controller\\": "controllers/",
+            "Model\\": "models/",
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "walid.kadache63",
+            "email": "mkaderd@gmail.com"
+        }
+    ],
+    "require": {}
+}
