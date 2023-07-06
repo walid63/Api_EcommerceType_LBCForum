@@ -1,10 +1,10 @@
 <?php
 
+include "./vendor/autoload.php";
 
+ // Définir une liste de routes avec les URL et les contrôleurs correspondants 
 
-
-// Définir une liste de routes avec les URL et les contrôleurs correspondants
-$routes = [
+ $routes = [
     '/' => 'HomeController::index',
     '/login' => 'AuthController::login',
     '/register' => 'AuthController::register',
@@ -20,8 +20,18 @@ $routes = [
     '/forum/post/edit/{postId}' => 'ForumController::editPost',
     '/forum/post/delete/{postId}' => 'ForumController::deletePost',
     '/forum/post/{postId}' => 'ForumController::showPost',
-    '/forum/posts' => 'ForumController::listPosts'
+    '/forum/posts' => 'ForumController::listPosts',
+    '/messagerie/create' => 'MessageController::createMessage',
+    '/messagerie/edit' => 'MessageController::updateMessage',
+    '/messagerie/received' => 'MessageController::listReceivedMessages',
+    '/messagerie/sent' => 'MessageController::listSentMessages',
+    '/annonces' => 'AnnonceController::index',
+    '/annonces/create' => 'AnnonceController::createAnnonce',
+    //'/annonces/{id}' => 'AnnonceController::show',
+  //  '/annonces/update/{id}' => 'AnnonceController::update',
+  //  '/annonces/delete/{id}' => 'AnnonceController::delete',
 ];
+
 
 $requestUrl = $_SERVER['REQUEST_URI'];
 

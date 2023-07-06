@@ -1,6 +1,6 @@
 <?php 
 include "./models/User.php";
-include "./src/User.php";
+//include "./src/User.php";
 
 
 class HomeController

@@ -1,5 +1,6 @@
 <?php
 
+include 'vendor/autoload.php';
 include "./models/User.php";
 
 
@@ -67,6 +68,12 @@ class AuthController
 
     public function login()
     {
+        
+        if (isset($_SESSION['auth_token'])) {
+            // L'utilisateur est déjà connecté, renvoyer un message indiquant qu'il est connecté
+            echo json_encode(['message' => 'Vous etes deja connecter '.$_SESSION['user']]);
+            return;
+        }
         // Récupérer les données de la requête
         $email = $_GET['email'];
         $password = $_GET['password'];
@@ -108,8 +115,10 @@ class AuthController
 
          
 
-            // Retourner la réponse au format JSON avec le jeton d'authentification ou d'autres données
-            echo json_encode(['message' => 'Login successful', 'token' => $token]);
+            // Retourner la réponse au format JSON avec le jeton ".d'authentification ou d'autres données
+           
+            echo json_encode(['message' => 'Bienvenue ' . $userData->getFirstname() . ' ' . $userData->getLastname(), 'user' => $_SESSION['user'],'token' => $token]);
+
         } else {
             // Les informations de connexion sont invalides
             echo json_encode(['message' => 'Invalid credentials']);

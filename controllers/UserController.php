@@ -14,17 +14,6 @@ class UserController
         $this->authController = new AuthController();
     }
 
-    public function getUsers()
-    {
-        // Logique pour obtenir tous les utilisateurs de votre application
-        $users = $this->userModel->getAllUsers();
-
-        // Retourner la réponse au format JSON
-        echo json_encode($users);
-    }
-
-  
-
     public function updateUser()
     {
         // Récupérer les données mises à jour de l'utilisateur depuis la requête
@@ -56,33 +45,17 @@ class UserController
     }
 
 
-    public function deleteUser()
-    {
-        // Logique pour supprimer un utilisateur spécifié par son ID
-
-        // Récupérer l'ID de l'utilisateur à supprimer depuis la requête
-        $userId = $_GET['id'];
-
-        // Supprimer l'utilisateur de la base de données ou effectuer d'autres opérations nécessaires
-
-        // Retourner la réponse au format JSON
-        echo json_encode(['message' => 'User deleted successfully']);
-    }
+    
+    
 
     public function handleRequest($request)
     {
         switch ($request) {
-            case 'GET':
-                $this->getUsers();
-                break;
             case 'POST':
                 $this->authController->register();
                 break;
             case 'PUT':
                 $this->updateUser();
-                break;
-            case 'DELETE':
-                $this->deleteUser();
                 break;
             default:
                 echo json_encode(['message' => 'Invalid request']);

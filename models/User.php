@@ -1,7 +1,7 @@
 <?php
 
-include "./server/_connect/_connect.php";
-include "./src/User.php";
+require_once "./server/_connect/_connect.php";
+require_once "./src/User.php";
 class UserModel
 {
     private $db;
@@ -100,35 +100,34 @@ class UserModel
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
-         $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-         if ($userData) {
-             $user = new User(
-                 $userData['firstname'],
-                 $userData['lastname'],
-                 $userData['username'],
-                 $userData['email'],
-                 $userData['password'],
-                 $userData['tel'],
-                 $userData['address'],
-                 $userData['ville'],
-                 $userData['code_postal']
-                 //$userData['created_at']
-             );
-     
-             $user->setId($userData['id']);
-             $user->setIsAdmin($userData['is_admin']);
-             $user->setIsBanned($userData['is_banned']);
-             
-             if ($userData['status'] !== null) {
+        if ($userData) {
+            $user = new User(
+                $userData['firstname'],
+                $userData['lastname'],
+                $userData['username'],
+                $userData['email'],
+                $userData['password'],
+                $userData['tel'],
+                $userData['address'],
+                $userData['ville'],
+                $userData['code_postal']
+                //$userData['created_at']
+            );
+
+            $user->setId($userData['id']);
+            $user->setIsAdmin($userData['is_admin']);
+            $user->setIsBanned($userData['is_banned']);
+
+            if ($userData['status'] !== null) {
                 $user->setStatus(json_decode($userData['status'], true));
             }
-        
-            return $user;
-         }
-     
-         return null;
 
+            return $user;
+        }
+
+        return null;
     }
 
     public function isEmailTaken($email)
@@ -152,5 +151,71 @@ class UserModel
         $stmt->bindValue(':id', $userId);
 
         return $stmt->execute();
+    }
+
+    public function getUserById($userId)
+    {
+        $query = "SELECT * FROM users WHERE id = :id";
+        $statement = $this->db->prepare($query);
+        $statement->execute([
+            'id' => $userId
+        ]);
+
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $user;
+    }
+
+
+
+    public function checkFriendship($userId, $friendId)
+    {
+        $query = "SELECT * FROM friends WHERE user_id = :user_id AND friend_id = :friend_id";
+        $statement = $this->db->prepare($query);
+        $statement->execute([
+            'user_id' => $userId,
+            'friend_id' => $friendId
+        ]);
+
+        $friendship = $statement->fetch(PDO::FETCH_ASSOC);
+
+        return $friendship ? true : false;
+    }
+
+
+
+    public function addFriend($userId, $friendId)
+    {
+        // Vérifier si l'utilisateur existe
+        if (!$this->getUserById($userId)) {
+            // Utilisateur introuvable
+            return false;
+        }
+
+        // Vérifier si l'ami existe
+        if (!$this->getUserById($friendId)) {
+            // Ami introuvable
+            return false;
+        }
+
+        // Vérifier si l'amitié existe déjà
+        if ($this->checkFriendship($userId, $friendId)) {
+            // L'amitié existe déjà
+            return false;
+        }
+
+        // Ajouter l'amitié dans la table d'amis
+        $query = "INSERT INTO friends (user_id, friend_id) VALUES (:user_id, :friend_id)";
+        $statement = $this->db->prepare($query);
+        $statement->execute([
+            'user_id' => $userId,
+            'friend_id' => $friendId
+        ]);
+
+        if ($statement->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

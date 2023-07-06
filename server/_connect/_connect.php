@@ -1,6 +1,6 @@
 <?php 
 
-include "./server/config/config.php";
+require_once "./server/config/config.php";
 
 class _connect
 {

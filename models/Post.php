@@ -1,7 +1,7 @@
 <?php
 
-include "./server/_connect/_connect.php";
-include "./src/Post.php";
+require_once "./server/_connect/_connect.php";
+require_once "./src/Post.php";
 
 class PostModel
 {
